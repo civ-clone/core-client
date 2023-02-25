@@ -1,28 +1,42 @@
+import { ChoiceMeta, ChoiceMetaData, DataForChoiceMeta } from './ChoiceMeta';
 import Player from '@civ-clone/core-player/Player';
 
 export interface IClient {
+  chooseFromList(
+    meta: ChoiceMetaData
+  ): Promise<DataForChoiceMeta<ChoiceMetaData>>;
   player(): Player;
   takeTurn(): Promise<any>;
 }
 
 export class Client implements IClient {
   #player: Player;
+  #randomNumberGenerator: () => number;
 
-  constructor(player: Player) {
+  constructor(
+    player: Player,
+    randomNumberGenerator: () => number = () => Math.random()
+  ) {
     this.#player = player;
+    this.#randomNumberGenerator = randomNumberGenerator;
+  }
+
+  async chooseFromList<Name extends keyof ChoiceMetaDataMap>(
+    meta: ChoiceMeta<Name>
+  ): Promise<DataForChoiceMeta<ChoiceMeta<Name>>> {
+    const choices = meta.choices(),
+      randomChoice =
+        choices[Math.floor(this.#randomNumberGenerator() * choices.length)];
+
+    return randomChoice.value();
   }
 
   player(): Player {
     return this.#player;
   }
 
-  takeTurn(): Promise<any> {
-    return new Promise(
-      (
-        resolve: (value?: any | PromiseLike<any>) => void,
-        reject: (reason?: any) => void
-      ): void => reject(new TypeError('Client#takeTurn must be implemented.'))
-    );
+  async takeTurn(): Promise<any> {
+    throw new TypeError('Client#takeTurn must be implemented.');
   }
 }
 

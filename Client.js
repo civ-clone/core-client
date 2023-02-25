@@ -12,22 +12,28 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     }
     return privateMap.get(receiver);
 };
-var _player;
+var _player, _randomNumberGenerator;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Client = void 0;
 class Client {
-    constructor(player) {
+    constructor(player, randomNumberGenerator = () => Math.random()) {
         _player.set(this, void 0);
+        _randomNumberGenerator.set(this, void 0);
         __classPrivateFieldSet(this, _player, player);
+        __classPrivateFieldSet(this, _randomNumberGenerator, randomNumberGenerator);
+    }
+    async chooseFromList(meta) {
+        const choices = meta.choices(), randomChoice = choices[Math.floor(__classPrivateFieldGet(this, _randomNumberGenerator).call(this) * choices.length)];
+        return randomChoice.value();
     }
     player() {
         return __classPrivateFieldGet(this, _player);
     }
-    takeTurn() {
-        return new Promise((resolve, reject) => reject(new TypeError('Client#takeTurn must be implemented.')));
+    async takeTurn() {
+        throw new TypeError('Client#takeTurn must be implemented.');
     }
 }
 exports.Client = Client;
-_player = new WeakMap();
+_player = new WeakMap(), _randomNumberGenerator = new WeakMap();
 exports.default = Client;
 //# sourceMappingURL=Client.js.map
