@@ -24,28 +24,42 @@ export type KeyForChoiceMeta<Meta> = Meta extends ChoiceMeta<infer K>
 
 export type DataForChoiceMeta<Meta> = ChoiceMetaDataMap[KeyForChoiceMeta<Meta>];
 
-export interface IChoiceMeta<Key, Data> extends IDataObject {
-  choices(): Choice<Data>[];
+export interface IChoiceMeta<
+  Key extends keyof ChoiceMetaDataMap,
+  Data = unknown
+> extends IDataObject {
+  choices(): Choice<ChoiceMetaDataMap[Key]>[];
+  data(): Data | undefined;
   key(): Key;
 }
 
-export class ChoiceMeta<Key extends keyof ChoiceMetaDataMap>
+export class ChoiceMeta<Key extends keyof ChoiceMetaDataMap, Data = unknown>
   extends DataObject
-  implements IChoiceMeta<Key, ChoiceMetaDataMap[Key]> {
+  implements IChoiceMeta<Key, Data>
+{
   #choices: Choice<ChoiceMetaDataMap[Key]>[] = [];
+  #data: Data | undefined;
   #key: Key;
 
-  constructor(entities: ChoiceMetaDataMap[Key][], key: Key) {
+  constructor(entities: ChoiceMetaDataMap[Key][], key: Key, data?: Data) {
     super();
 
-    this.addKey('choices', 'key');
+    this.addKey('choices', 'data', 'key');
 
     entities.forEach((choice) => this.#choices.push(new Choice(choice)));
+    this.#data = data;
     this.#key = key;
   }
 
   choices(): Choice<ChoiceMetaDataMap[Key]>[] {
     return this.#choices;
+  }
+
+  /**
+   * Supplementary data to assist in making a decision.
+   */
+  data(): Data | undefined {
+    return this.#data;
   }
 
   key(): Key {

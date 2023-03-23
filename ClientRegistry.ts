@@ -11,7 +11,8 @@ export interface IClientRegistry extends IEntityRegistry<Client> {
 
 export class ClientRegistry
   extends EntityRegistry<Client>
-  implements IClientRegistry {
+  implements IClientRegistry
+{
   constructor() {
     super(Client);
   }

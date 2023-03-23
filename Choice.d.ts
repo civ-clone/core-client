@@ -7,7 +7,8 @@ export interface IChoice<Data> extends IDataObject {
 }
 export declare class Choice<Data = unknown>
   extends DataObject
-  implements IChoice<Data> {
+  implements IChoice<Data>
+{
   #private;
   constructor(value: Data);
   value(): Data;

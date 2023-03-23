@@ -9,7 +9,8 @@ export interface IClientRegistry extends IEntityRegistry<Client> {
 }
 export declare class ClientRegistry
   extends EntityRegistry<Client>
-  implements IClientRegistry {
+  implements IClientRegistry
+{
   constructor();
   getByPlayer(player: Player): Client;
 }

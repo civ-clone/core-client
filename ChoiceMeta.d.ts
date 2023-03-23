@@ -12,25 +12,35 @@ declare global {
     'choose-leader': IConstructor<Leader>;
   }
 }
-export declare type ChoiceMetaData = {
+export type ChoiceMetaData = {
   [Name in keyof ChoiceMetaDataMap]: ChoiceMeta<Name>;
 }[keyof ChoiceMetaDataMap];
-export declare type KeyForChoiceMeta<Meta> = Meta extends ChoiceMeta<infer K>
+export type KeyForChoiceMeta<Meta> = Meta extends ChoiceMeta<infer K>
   ? K
   : never;
-export declare type DataForChoiceMeta<
-  Meta
-> = ChoiceMetaDataMap[KeyForChoiceMeta<Meta>];
-export interface IChoiceMeta<Key, Data> extends IDataObject {
-  choices(): Choice<Data>[];
+export type DataForChoiceMeta<Meta> = ChoiceMetaDataMap[KeyForChoiceMeta<Meta>];
+export interface IChoiceMeta<
+  Key extends keyof ChoiceMetaDataMap,
+  Data = unknown
+> extends IDataObject {
+  choices(): Choice<ChoiceMetaDataMap[Key]>[];
+  data(): Data | undefined;
   key(): Key;
 }
-export declare class ChoiceMeta<Key extends keyof ChoiceMetaDataMap>
+export declare class ChoiceMeta<
+    Key extends keyof ChoiceMetaDataMap,
+    Data = unknown
+  >
   extends DataObject
-  implements IChoiceMeta<Key, ChoiceMetaDataMap[Key]> {
+  implements IChoiceMeta<Key, Data>
+{
   #private;
-  constructor(entities: ChoiceMetaDataMap[Key][], key: Key);
+  constructor(entities: ChoiceMetaDataMap[Key][], key: Key, data?: Data);
   choices(): Choice<ChoiceMetaDataMap[Key]>[];
+  /**
+   * Supplementary data to assist in making a decision.
+   */
+  data(): Data | undefined;
   key(): Key;
 }
 export default ChoiceMeta;
