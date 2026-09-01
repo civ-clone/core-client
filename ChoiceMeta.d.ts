@@ -34,7 +34,9 @@ export declare class ChoiceMeta<
   extends DataObject
   implements IChoiceMeta<Key, Data>
 {
-  #private;
+  private _choices;
+  private _data;
+  private _key;
   constructor(entities: ChoiceMetaDataMap[Key][], key: Key, data?: Data);
   choices(): Choice<ChoiceMetaDataMap[Key]>[];
   /**

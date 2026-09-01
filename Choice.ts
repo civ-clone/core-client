@@ -11,18 +11,18 @@ export class Choice<Data = unknown>
   extends DataObject
   implements IChoice<Data>
 {
-  #value: Data;
+  private _value: Data;
 
   constructor(value: Data) {
     super();
 
     this.addKey('value');
 
-    this.#value = value;
+    this._value = value;
   }
 
   value(): Data {
-    return this.#value;
+    return this._value;
   }
 }
 

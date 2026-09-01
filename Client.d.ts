@@ -8,7 +8,8 @@ export interface IClient {
   takeTurn(): Promise<any>;
 }
 export declare class Client implements IClient {
-  #private;
+  private _player;
+  protected _randomNumberGenerator: () => number;
   constructor(player: Player, randomNumberGenerator?: () => number);
   chooseFromList<Name extends keyof ChoiceMetaDataMap>(
     meta: ChoiceMeta<Name>

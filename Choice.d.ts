@@ -9,7 +9,7 @@ export declare class Choice<Data = unknown>
   extends DataObject
   implements IChoice<Data>
 {
-  #private;
+  private _value;
   constructor(value: Data);
   value(): Data;
 }

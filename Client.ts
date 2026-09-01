@@ -10,15 +10,19 @@ export interface IClient {
 }
 
 export class Client implements IClient {
-  #player: Player;
-  #randomNumberGenerator: () => number;
+  private _player: Player;
+  // `protected` because `core-civ-client`'s `Client` and `SimpleAIClient` both
+  // declared their own `#randomNumberGenerator` shadowing this one, which two
+  // `private` fields of the same name cannot express. They now forward their
+  // generator to this constructor instead of keeping a second copy.
+  protected _randomNumberGenerator: () => number;
 
   constructor(
     player: Player,
     randomNumberGenerator: () => number = () => Math.random()
   ) {
-    this.#player = player;
-    this.#randomNumberGenerator = randomNumberGenerator;
+    this._player = player;
+    this._randomNumberGenerator = randomNumberGenerator;
   }
 
   async chooseFromList<Name extends keyof ChoiceMetaDataMap>(
@@ -26,13 +30,13 @@ export class Client implements IClient {
   ): Promise<DataForChoiceMeta<ChoiceMeta<Name>>> {
     const choices = meta.choices(),
       randomChoice =
-        choices[Math.floor(this.#randomNumberGenerator() * choices.length)];
+        choices[Math.floor(this._randomNumberGenerator() * choices.length)];
 
     return randomChoice.value();
   }
 
   player(): Player {
-    return this.#player;
+    return this._player;
   }
 
   async takeTurn(): Promise<any> {

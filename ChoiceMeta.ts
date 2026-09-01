@@ -37,33 +37,33 @@ export class ChoiceMeta<Key extends keyof ChoiceMetaDataMap, Data = unknown>
   extends DataObject
   implements IChoiceMeta<Key, Data>
 {
-  #choices: Choice<ChoiceMetaDataMap[Key]>[] = [];
-  #data: Data | undefined;
-  #key: Key;
+  private _choices: Choice<ChoiceMetaDataMap[Key]>[] = [];
+  private _data: Data | undefined;
+  private _key: Key;
 
   constructor(entities: ChoiceMetaDataMap[Key][], key: Key, data?: Data) {
     super();
 
     this.addKey('choices', 'data', 'key');
 
-    entities.forEach((choice) => this.#choices.push(new Choice(choice)));
-    this.#data = data;
-    this.#key = key;
+    entities.forEach((choice) => this._choices.push(new Choice(choice)));
+    this._data = data;
+    this._key = key;
   }
 
   choices(): Choice<ChoiceMetaDataMap[Key]>[] {
-    return this.#choices;
+    return this._choices;
   }
 
   /**
    * Supplementary data to assist in making a decision.
    */
   data(): Data | undefined {
-    return this.#data;
+    return this._data;
   }
 
   key(): Key {
-    return this.#key;
+    return this._key;
   }
 }
 
