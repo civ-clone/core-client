@@ -1,5 +1,6 @@
 import { ChoiceMeta, ChoiceMetaData, DataForChoiceMeta } from './ChoiceMeta';
 import Player from '@civ-clone/core-player/Player';
+import { instance as rngInstance } from '@civ-clone/core-random';
 
 export interface IClient {
   chooseFromList(
@@ -19,7 +20,7 @@ export class Client implements IClient {
 
   constructor(
     player: Player,
-    randomNumberGenerator: () => number = () => Math.random()
+    randomNumberGenerator: () => number = rngInstance
   ) {
     this._player = player;
     this._randomNumberGenerator = randomNumberGenerator;

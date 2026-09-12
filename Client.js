@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Client = void 0;
+const core_random_1 = require("@civ-clone/core-random");
 class Client {
-    constructor(player, randomNumberGenerator = () => Math.random()) {
+    constructor(player, randomNumberGenerator = core_random_1.instance) {
         this._player = player;
         this._randomNumberGenerator = randomNumberGenerator;
     }
